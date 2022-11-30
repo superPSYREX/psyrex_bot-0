@@ -255,7 +255,8 @@ async def forwardto(_, m: Message):
                 await psy.send_video(c_id, file, caption)
         else:
             if z.photo or file.endswith(exe):
-                await pic_sender(c_id, file, False)
+                x = await psy.send_photo(c_id, file, caption)
+                await x.reply_document(file)
             elif z.document:
                 await psy.send_document(c_id, file)
             elif z.video:
@@ -329,9 +330,11 @@ async def pic_uploader(_, m: Message):
     if not yus:
         return await m.reply_text("No file to upload.\nSee help to know more")
     try:
-        await pic_sender()
-        await m.reply_text("Successfully uploaded the files")
-        return
+      x = await m.reply_text("Uploading in process..")
+      await pic_sender()
+      await x.delete()
+      await m.reply_text("Successfully uploaded the files")
+      return
     except Exception as e:
         return await m.reply_text(f"Got an error:\n{e}")
 
